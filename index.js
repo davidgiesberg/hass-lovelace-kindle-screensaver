@@ -88,6 +88,7 @@ const batteryStore = {};
     const isCharging = url.searchParams.get("isCharging");
     const pageNumber =
       pageNumberStr === "/" ? 1 : parseInt(pageNumberStr.substr(1));
+    const extension = pageNumberStr.split(".")[pageNumberStr.split(".").length - 1];
     if (
       isFinite(pageNumber) === false ||
       pageNumber > config.pages.length ||
@@ -97,6 +98,13 @@ const batteryStore = {};
       response.writeHead(400);
       response.end("Invalid request");
       return;
+    }
+    if (extension === "html") {
+      const n = new Date();
+      console.log(`${n.toISOString()}: Page ${pageNumber} was accessed`);
+
+      response.writeHead(200);
+      response.end(`<img src="/` + pageNumber + `" >`);
     }
     try {
       // Log when the page was accessed
